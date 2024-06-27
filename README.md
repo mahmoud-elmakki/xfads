@@ -2,7 +2,7 @@
 Approximate inference targeted at variational Gaussian state-space models with dense covariance matrix approximations.  For more details, see our paper: [Dowling, Zhao, Park. 2024](https://arxiv.org/abs/2403.01371) \[7\]
 
 
-### Introduction
+## Introduction
 A LowRankNonlinearStateSpaceModel object is used to perform inference in a state-space graphical model specified by,
 
 $$p(y_{1:T}, z_{1:T}) = p_{\theta}(z_1) p(y_1 | z_1) \prod p_{\psi}(y_t | z_t) p_{\theta}(z_t | z_{t-1})$$
@@ -19,7 +19,7 @@ Specification of a LowRankNonlinearStateSpaceModel requires:
 5. backward_encoder: a nn.Module whose `forward` function maps sequences of local natural parameter updates, $\alpha_{1:T}$, to backward natural parameter updates, $\beta_{1:T}$
 6. nl_filter: a nn.Module whose forward method takes natural parameter representation of observations, $\tilde{\lambda}_{1:T}$, and performs approximate posterior inference for the specified nonlinear dynamical system
 
-### Parameter descriptions
+## Parameter descriptions
 There are several parameters that can be configured to trade off expressivity/speed/generalization properties of the model and inference algorithm that we detail below.  Some are specific to the case of neural data modeled using a Poisson observation model with log-linear readout of the latent state.
 
 1. n_latents: (int) total number of latent variables
@@ -34,7 +34,7 @@ There are several parameters that can be configured to trade off expressivity/sp
 
 Setting `p_mask_a` is equivalent to masking *actual* observations, $y_t$; this strategy was used in the context of structured VAE's for linear dynamical systems in [Zhao, and Linderman. 2023](https://arxiv.org/abs/2305.16543) \[5\] to promote learning dynamics more adept at prediction (and thus generating more realistic data).  Setting `p_mask_b` is equivalent to masking `pseudo` observations, $\tilde{y}_t$ -- this helps to regularize both the local/backward encoders required.
 
-### Installation
+## Installation
 1. Install miniconda or anaconda
 This is just to leverage `conda` for managing the python environment. You can still use the IDE or code editor of your choise.
 2. Clone this repo
@@ -56,12 +56,17 @@ In a cell, run:
 ```
 !pip install -q condacolab
 ```
+But since colab uses sessions anyway, it won't be that useful to use an environment. You can just start a new colab session, and run, in a cell:
+```
+!pip install torch pytorch-lightning scikit-learn hydra-core matplotlib einops
+!pip install pyproject.toml -e .
+```
 
-### Getting started withe examples:
+## Getting started withe examples:
 The set of examples in this codebase covers the priamary functioning of the graphical state-space model of XFADS. The code is structured in a modular way that allows the users to change and plug-in their own definitions of the classes that struct the elements of the model, i.e. the dynamics function, the likelihood density, the amortization network, etc.
 
 
-### Walk-through
+## Walk-through
 Now, for simplicity, and to get a grasp of the wheel, it'e recommended to go through the exapmles of applying XFADS to some of the benchmarking datasets, before reconfiguring for yours.
 - `lda_example` A simple linear dynamical system.
 - `vdp_example` Adding a bit of non-linearity; training XFADS on data synthesized from the Vanderpool dynamical oscillator.
@@ -70,7 +75,7 @@ Then, some real experimental data:
 - `monkey_timing` similarly, for the `dmfc_rsg` dataset.
   
 
-### Example configuration
+## Example configuration
 LSVS was designed with custom configurations in mind so that depending on the problem, `dynamics_mod`, `initial_c_pdf`, `likelihood_pdf`, `local_encoder`, and `backward_encoder` can be configured as desired.  We include some general classes in `ssm_modules/encoders`, `ssm_modules/likelihoods` and `ssm_modules/dynamics` that should be sufficient for a wide range of problems.  Below is an example configuration.
 ```
     """likelihood pdf"""
@@ -104,7 +109,7 @@ LSVS was designed with custom configurations in mind so that depending on the pr
 ```
 
 
-### acknowledgements and references
+## acknowledgements and references
 Structure of the code and configuration management was heavily inspired by the excellently written `lfads-torch` package at [https://github.com/arsedler9/lfads-torch](https://github.com/arsedler9/lfads-torch) as described in [Sedler and Pandarinath, 2023](https://arxiv.org/abs/2309.01230) \[6\].
 
 For neural latents benchmark experiments, we use reformatted versions of the mc_maze_small \[1\], mc_maze_medium \[2\], and mc_maze large \[3\] datasets.
