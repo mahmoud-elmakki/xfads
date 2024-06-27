@@ -62,7 +62,7 @@ But since colab uses sessions anyway, it won't be that useful to use an environm
 !pip install pyproject.toml -e .
 ```
 
-## Getting started withe examples:
+## Getting started with the examples:
 The set of examples in this codebase covers the priamary functioning of the graphical state-space model of XFADS. The code is structured in a modular way that allows the users to change and plug-in their own definitions of the classes that struct the elements of the model, i.e. the dynamics function, the likelihood density, the amortization network, etc.
 
 
