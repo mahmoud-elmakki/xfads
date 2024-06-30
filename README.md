@@ -36,12 +36,12 @@ Setting `p_mask_a` is equivalent to masking *actual* observations, $y_t$; this s
 
 ## Installation
 1. Install miniconda or anaconda
-This is just to leverage `conda` for managing the python environment. You can still use the IDE or code editor of your choise.
+This is just to leverage `conda` for managing the Python environment. You can still use the IDE or code editor of your choice.
 2. Clone this repo
    ```
    git clone https://github.com/catniplab/xfads
    ```
-3. Create Conda environment, and install it's required packages, from `environment.yaml`
+3. Create a Conda environment, and install its required packages, from `environment.yaml`
    Make sure you are in the project directory i.e., the same directory as `environment.yaml`, and run:
    ```
    conda env create -f environment.yaml
@@ -51,12 +51,12 @@ This is just to leverage `conda` for managing the python environment. You can st
    pip install -e .
    ```
 Note:
-In case of using Google Colab, to be able to use ```conda``` commands, you have to install ```condacolab```\
+In the case of using Google Colab, to be able to use ```conda``` commands, you have to install ```condacolab```\
 In a cell, run:
 ```
 !pip install -q condacolab
 ```
-But since colab uses sessions anyway, it won't be that useful to use an environment. You can just start a new colab session, and run, in a cell:
+But since Colab uses sessions anyway, it won't be that useful to use an environment. You can just start a new Colab session, and run, in a cell:
 ```
 !pip install torch pytorch-lightning scikit-learn hydra-core matplotlib einops
 !pip install pyproject.toml -e .
@@ -76,7 +76,7 @@ Then, some real experimental data:
   
 
 ## Example configuration
-LSVS was designed with custom configurations in mind so that depending on the problem, `dynamics_mod`, `initial_c_pdf`, `likelihood_pdf`, `local_encoder`, and `backward_encoder` can be configured as desired.  We include some general classes in `ssm_modules/encoders`, `ssm_modules/likelihoods` and `ssm_modules/dynamics` that should be sufficient for a wide range of problems.  Below is an example configuration.
+LSVS was designed with custom configurations in mind so that depending on the problem, `dynamics_mod`, `initial_c_pdf`, `likelihood_pdf`, `local_encoder`, and `backward_encoder` can be configured as desired.  We include some general classes in `ssm_modules/encoders`, `ssm_modules/likelihoods`, and `ssm_modules/dynamics` that should be sufficient for a wide range of problems.  Below is an example configuration.
 ```
     """likelihood pdf"""
     C = torch.nn.Linear(cfg.n_latents, n_neurons_obs, device=cfg.device)
@@ -109,8 +109,8 @@ LSVS was designed with custom configurations in mind so that depending on the pr
 ```
 
 
-## acknowledgements and references
-Structure of the code and configuration management was heavily inspired by the excellently written `lfads-torch` package at [https://github.com/arsedler9/lfads-torch](https://github.com/arsedler9/lfads-torch) as described in [Sedler and Pandarinath, 2023](https://arxiv.org/abs/2309.01230) \[6\].
+## Acknowledgements and references
+The structure of the code and configuration management was heavily inspired by the excellently written `lfads-torch` package at [https://github.com/arsedler9/lfads-torch](https://github.com/arsedler9/lfads-torch) as described in [Sedler and Pandarinath, 2023](https://arxiv.org/abs/2309.01230) \[6\].
 
 For neural latents benchmark experiments, we use reformatted versions of the mc_maze_small \[1\], mc_maze_medium \[2\], and mc_maze large \[3\] datasets.
 
