@@ -67,7 +67,7 @@ The set of examples in this codebase covers the priamary functioning of the grap
 
 
 ## Walk-through
-Now, for simplicity, and to get a grasp of the wheel, it'e recommended to go through the exapmles of applying XFADS to some of the benchmarking datasets, before reconfiguring for yours.
+Now, for simplicity, and to get a grasp of the wheel, it'e recommended to go through the examples of applying XFADS to some of the benchmarking datasets, before reconfiguring for yours.
 - `lda_example` A simple linear dynamical system.
 - `vdp_example` Adding a bit of non-linearity; training XFADS on data synthesized from the Vanderpool dynamical oscillator.
 Then, some real experimental data:
