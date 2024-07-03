@@ -32,8 +32,8 @@ batch_sz: 512
 # --- misc --- #
 bin_sz: 20e-3
 bin_sz_ms: 20
-n_bins_bhv: 20
-move_onset: 24
+n_bins_bhv: 10
+move_onset: 12
 
 #----- data -----"
 n_neurons: 182

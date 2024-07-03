@@ -27,7 +27,7 @@ def main():
     save_root_path = 'data/'
 
     # Extract neural data and lagged hand velocity
-    binsize = 10
+    binsize = 20
     n_neurons = 54
     dataset.resample(binsize)
 
