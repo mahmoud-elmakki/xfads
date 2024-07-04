@@ -53,47 +53,6 @@ def plot_rastor(data, ex_trials, top_n_neurons, cfg):
         plt.show()
 
 
-def calculate_data_psth(trials, neurons):
-    
-    n_bins = n_time_bins
-    bin_size = cfg.bin_sz  # Assuming bin size of 10 ms
-    
-    psths = []
-
-    # trials x time bins
-    for neuron in neurons:
-    
-        single_neuron = trials[:, :, neuron]
-
-        # Calculate the PSTH by averaging across trials
-        psth = torch.mean(single_neuron, axis=0) / bin_size
-        psths.append(psth)
-        
-    return np.array(psths)
-
-
-def calculate_model_psth(trials, sample, neurons):
-    
-    n_bins = n_time_bins
-    bin_size = cfg.bin_sz
-    
-    trials = torch.mean(trials, dim=0)
-    psths = []
-    
-    with torch.no_grad():
-
-        # trials x time bins
-        for neuron in neurons:
-            
-            single_neuron = trials[sample, :, :, neuron]
-
-            # Calculate the PSTH by averaging across trials
-            psth = torch.mean(single_neuron, axis=0)
-            psths.append(psth)
-        
-    return np.array(psths)
-
-
 def order_neurons(trials, latents, trial, latent):
 
     with torch.no_grad():

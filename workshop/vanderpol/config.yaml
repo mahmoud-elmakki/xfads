@@ -15,7 +15,7 @@ n_hidden_backward: 64
 
 # --- hyperparameters --- #
 use_cd: False
-p_mask_a: 0.5
+p_mask_a: 0.0
 p_mask_b: 0.0
 p_mask_apb: 0.0
 p_mask_y_in: 0.0
