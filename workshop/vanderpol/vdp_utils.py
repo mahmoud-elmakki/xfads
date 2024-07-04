@@ -5,19 +5,6 @@ import random
 import torch
 
 
-def gen_unique_rand_ints(mn, mx, n=4):
-    
-    unique_numbers = []
-    
-    while len(unique_numbers) < n:
-        number = random.randint(mn, mx)
-        
-        if number not in unique_numbers:
-            unique_numbers.append(number)
-            
-    return unique_numbers
-
-
 def plot_rastor(data, ex_trials, top_n_neurons, cfg):
     
     data = data.clone()
@@ -99,7 +86,7 @@ def plot_z_2d(fig, axs, ex_trials, latents, color, regime):
     fig.subplots_adjust(hspace=0)
     
     if regime == 'prediction':
-        [axs[i].axvline(22, linestyle='--', color='red', alpha=0.5) for i in range(len(ex_trials))]
+        [axs[i].axvline(55, linestyle='--', color='red', alpha=0.5) for i in range(len(ex_trials))]
     
     [axs[i].set_title(f'trial {ex_trials[i]}', fontsize=8) for i in range(len(ex_trials))]
     
@@ -110,7 +97,7 @@ def plot_z_2d(fig, axs, ex_trials, latents, color, regime):
     
     ymin, _ = axs[len(ex_trials)-1].get_ylim()
     
-    axs[len(ex_trials)-1].annotate('prediction\nstarts', xy=(22, ymin), xytext=(5, ymin+ymin),
+    axs[len(ex_trials)-1].annotate('prediction\nstarts', xy=(55, ymin), xytext=(5, ymin+ymin),
              arrowprops=dict(facecolor='gray', arrowstyle='->', alpha=0.5),
              fontsize=8, ha='center', alpha=0.5)
     

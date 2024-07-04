@@ -5,20 +5,6 @@ import random
 import torch
 
 
-
-def gen_unique_rand_ints(mn, mx, n=4):
-    
-    unique_numbers = []
-    
-    while len(unique_numbers) < n:
-        number = random.randint(mn, mx)
-        
-        if number not in unique_numbers:
-            unique_numbers.append(number)
-            
-    return unique_numbers
-
-
 def plot_rastor(data, ex_trials, top_n_neurons, cfg):
     
     data = data.clone()
