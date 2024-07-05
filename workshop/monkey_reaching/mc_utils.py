@@ -107,7 +107,7 @@ def plot_rastor(data, latents, trial_list, top_n_neurons, cfg, regime='real', or
         
         n_trials_to_plot = 4
 
-        fig, axes = plt.subplots(ncols=n_trials_to_plot, figsize=(11, 5))
+        fig, axes = plt.subplots(ncols=n_trials_to_plot, figsize=(9, 4))
         fig.suptitle('generated trials' if regime in ['filtering', 'smoothing', 'prediction'] else 'real trials', fontsize=10)
         
         vmin, _ = torch.min(data[trial_list].flatten(), dim=0)

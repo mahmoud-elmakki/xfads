@@ -1,64 +1,17 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import random
 
 import torch
 
 
-def plot_rastor(data, ex_trials, top_n_neurons, cfg):
-    
-    data = data.clone()
-        
-    with torch.no_grad():
-
-        plt.figure(figsize=(16, 6))
-        
-        n_trials_to_plot = 4
-        n_time_bins = data.shape[1]
-
-        fig, axes = plt.subplots(ncols=n_trials_to_plot, figsize=(14, 6))
-        fig.suptitle('data trials')
-        
-        vmin, _ = torch.min(data[ex_trials].flatten(), dim=0)
-        vmax, _ = torch.max(data[ex_trials].flatten(), dim=0)
-
-        for ax, trial in zip(axes, ex_trials):
-
-            cax = ax.imshow(data[trial].T[:top_n_neurons], cmap='viridis', interpolation='none', aspect='auto')
-            
-            cbar = fig.colorbar(cax, ax=ax, shrink=0.2)
-            cbar.mappable.set_clim(vmin=vmin, vmax=vmax)
-            if fig.get_axes().index(ax) == 0:
-                cbar.set_label('spike counts')
-                
-            ax.set_title(f'trial {trial+1}', fontsize=10)
-            
-            x_ticks = ax.get_xticks()
-            x_labels = x_ticks * cfg.bin_sz_ms
-            ax.set_xticks(x_ticks, x_labels)
-            
-            ax.set_xlim(0, n_time_bins)
-            
-            ax.spines['right'].set_visible(False)
-
-        #  make the y-axis unvisible exept for the first plot.
-        [axes[i].yaxis.set_visible('false') for i in range(1, n_trials_to_plot)]
-        [axes[i].set_yticks([]) for i in range(1, n_trials_to_plot)]
-        
-        axes[0].set_xlabel('time (ms)')
-        axes[0].set_ylabel('neurons')
-        
-        fig.tight_layout()
-
-        plt.show()
-
-
 def order_neurons(trials, latents, trial, latent):
 
     with torch.no_grad():
 
-        trial_to_reorder = trials[trial]
-        latent_to_compare = torch.mean(latents[:, 0, :, latent], dim=0)
+        trial_to_reorder = trials[trial].cpu()
+        latent_to_compare = latents[trial, :, latent].cpu()
 
         # Check for NaN or infinite values and clean the data if necessary
         trial_to_reorder = np.nan_to_num(trial_to_reorder, nan=0.0, posinf=0.0, neginf=0.0)
@@ -79,6 +32,78 @@ def order_neurons(trials, latents, trial, latent):
         ordered_correlation_df = correlation_df.reindex(correlation_df.correlation.abs().sort_values(ascending=False).index)
 
         return ordered_correlation_df.to_numpy(), ordered_correlation_df.to_numpy().T[0]
+    
+
+def plot_rastor(data, cfg, trial_list=[0, 1, 2, 3], top_n_neurons=10, regime='real', order=False, latents=None):
+    
+    data = data.clone()
+    
+    if order == True:
+        latents = latents.clone()
+        
+        for trial in trial_list:
+            # Get the indices of the ordered neurons based on their contribution to the first principle latent dimension
+            ordered_correlations, ordered_neurons = order_neurons(data, latents, trial=trial, latent=0)
+            # just reorder the neurons in the trials we want to plot.
+            data[trial] = data[trial, :, ordered_neurons-1]
+        
+    with torch.no_grad():
+
+        plt.figure(figsize=(16, 6))
+        
+        n_trials_to_plot = len(trial_list)
+
+        fig, axes = plt.subplots(ncols=n_trials_to_plot, figsize=(9, 4))
+        fig.suptitle('generated trials' if regime in ['filtering', 'smoothing', 'prediction'] else 'real trials', fontsize=12)
+        
+        vmin, _ = torch.min(data[trial_list].flatten(), dim=0)
+        vmax, _ = torch.max(data[trial_list].flatten(), dim=0)
+
+        for ax, trial in zip(axes, trial_list):
+
+            cax = ax.imshow(data[trial].T[:top_n_neurons].cpu(), cmap='viridis', interpolation='none', aspect='auto')
+            
+            cbar = fig.colorbar(cax, ax=ax, shrink=0.2)
+            cbar.mappable.set_clim(vmin=vmin, vmax=vmax)
+            if fig.get_axes().index(ax) == 0:
+                cbar.set_label('spike counts')
+                
+            ax.set_title(f'trial {trial+1}', fontsize=8)
+            
+            x_ticks = ax.get_xticks()
+            x_labels = x_ticks * cfg.bin_sz_ms
+            ax.set_xticks(x_ticks, x_labels)
+            
+            ax.set_xlim(0, data.shape[1])
+            
+            ax.spines['right'].set_visible(False)
+            
+            if regime == 'prediction':
+                ax.axvline(x=cfg.n_bins_bhv, color='r', linestyle='--')  # mark prediction start
+            
+            if trial==trial_list[0]:
+                
+                if regime == 'prediction':
+                    
+                    ymin, ymax = ax.get_ylim()
+    
+                    ax.annotate(
+                        'prediction\nstarts',
+                        xy=(cfg.n_bins_bhv, 0), xytext=(cfg.n_bins_bhv*0.4, 0-top_n_neurons*0.05),
+                        arrowprops=dict(facecolor='gray', arrowstyle='->', alpha=0.7),
+                        fontsize=8, ha='center', alpha=1)
+            
+        #  make the y-axis unvisible exept for the first plot.
+        [axes[i].yaxis.set_visible('false') for i in range(1, n_trials_to_plot)]
+        [axes[i].set_yticks([]) for i in range(1, n_trials_to_plot)]
+        
+        axes[0].set_xlabel('time (ms)')
+        axes[0].set_ylabel('neurons' if order == False else 'ordered neurons')
+        
+        fig.tight_layout()
+
+        plt.show()
+
     
     
 def plot_latent_trajectory(data, latents, ex_trials, latent_idx=0):
@@ -107,14 +132,14 @@ def plot_latent_trajectory(data, latents, ex_trials, latent_idx=0):
         plt.show()
         
         
-def plot_z_2d(fig, axs, ex_trials, latents, color, regime):
+def plot_z_2d(fig, axs, ex_trials, latents, cfg, color, regime):
     
     n_trials, n_bins, n_latents = latents.shape
     
     fig.subplots_adjust(hspace=0)
     
     if regime == 'prediction':
-        [axs[i].axvline(22, linestyle='--', color='red', alpha=0.5) for i in range(len(ex_trials))]
+        [axs[i].axvline(cfg.n_bins_bhv, linestyle='--', color='red', alpha=0.5) for i in range(len(ex_trials))]
     
     [axs[i].set_title(f'trial {ex_trials[i]}', fontsize=8) for i in range(len(ex_trials))]
     
@@ -123,10 +148,12 @@ def plot_z_2d(fig, axs, ex_trials, latents, color, regime):
 
     [axs[i].set_xlim(0, n_bins) for i in range(n_trials)]
     
-    ymin, _ = axs[len(ex_trials)-1].get_ylim()
+    ymin, ymax = axs[len(ex_trials)-1].get_ylim()
     
-    axs[len(ex_trials)-1].annotate('prediction\nstarts', xy=(22, ymin), xytext=(5, ymin+ymin),
-             arrowprops=dict(facecolor='gray', arrowstyle='->', alpha=0.5),
-             fontsize=8, ha='center', alpha=0.5)
+    axs[len(ex_trials)-1].annotate(
+                'prediction\nstarts',
+                xy=(cfg.n_bins_bhv, ymin), xytext=(cfg.n_bins_bhv*0.4, ymin-np.abs((ymax-ymin)*0.3)),
+                arrowprops=dict(facecolor='gray', arrowstyle='->', alpha=0.5),
+                fontsize=8, ha='center', alpha=0.5)
     
     fig.tight_layout()
