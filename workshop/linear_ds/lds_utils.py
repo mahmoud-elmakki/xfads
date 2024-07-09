@@ -112,7 +112,8 @@ def plot_latent_trajectory(data, latents, ex_trials, latent_idx=0):
 
         fig, axes = plt.subplots(len(ex_trials), 1, figsize=(6, 8))
 
-        fig.suptitle(f'latent {latent_idx+1}\n\n\n\n')
+        #fig.suptitle(f'latent {latent_idx+1}\n\n\n\n')
+        fig.suptitle(f'first principal latent\n\n\n\n' if latent_idx == 0 else f'second principal latent\n\n\n\n')
 
         for i, ax in enumerate(axes.flat):    
 

@@ -59,23 +59,26 @@ def plot_spikes(spikes, axs):
                     edgecolors='none')
         
         
-def plot_z_2d(fig, axs, data, trial_indcs, move_onset, n_bins_bhv, color, regime):
+def plot_z_2d(fig, axs, data, trial_indcs, cfg, color, regime):
     
     samples = data[:, trial_indcs, ..., -3:]
     n_samples, n_trials, n_bins, n_neurons = samples.shape
     
     fig.subplots_adjust(hspace=0)
     
-    [axs[i].axvline(move_onset, linestyle='--', color='gray') for i in range(n_trials)]
+    [axs[i].axvline(cfg.move_onset, linestyle='--', color='gray') for i in range(n_trials)]
     
     if regime == 'prediction':
-        [axs[i].axvline(10, linestyle='--', color='red') for i in range(len(trial_indcs))]
+        [axs[i].axvline(cfg.n_bins_bhv, linestyle='--', color='red') for i in range(len(trial_indcs))]
     
     [axs[i].axis('off') for i in range(n_trials-1)]
+    
     axs[-1].yaxis.set_visible(False)
     axs[-1].spines['left'].set_visible(False)
     axs[-1].spines['right'].set_visible(False)
     axs[-1].spines['top'].set_visible(False)
+    
+    axs[-1].set_xlabel('time bins')
     
     [axs[i].set_title(f'trial {trial_indcs[i]}', fontsize=8) for i in range(n_trials)]
     
