@@ -63,10 +63,11 @@ def plot_rastor(data, cfg, trial_list=[0, 1, 2, 3], top_n_neurons=10, regime='re
 
             cax = ax.imshow(data[trial].T[:top_n_neurons].cpu(), cmap='viridis', interpolation='none', aspect='auto')
             
-            cbar = fig.colorbar(cax, ax=ax, shrink=0.2)
+            cbar = fig.colorbar(cax, ax=ax, shrink=0.3)
             cbar.mappable.set_clim(vmin=vmin, vmax=vmax)
             if fig.get_axes().index(ax) == 0:
-                cbar.set_label('spike counts')
+                cbar.set_label('average unit activity', fontsize=8)
+            cbar.ax.tick_params(labelsize=8)
                 
             ax.set_title(f'trial {trial+1}', fontsize=8)
             

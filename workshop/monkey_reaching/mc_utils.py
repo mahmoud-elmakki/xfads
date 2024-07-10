@@ -16,7 +16,7 @@ import torch
 
 def plot_z_samples(fig, axs, data, trial_indcs, move_onset, n_bins_bhv, color_map_list):
     
-    samples = data[:, trial_indcs, ..., -3:]
+    samples = data[:, trial_indcs, ..., :3]
     n_samples, n_trials, n_bins, n_neurons = samples.shape
     
     fig.subplots_adjust(hspace=0)
@@ -61,7 +61,7 @@ def plot_spikes(spikes, axs):
         
 def plot_z_2d(fig, axs, data, trial_indcs, cfg, color, regime):
     
-    samples = data[:, trial_indcs, ..., -3:]
+    samples = data[:, trial_indcs, ..., :3]
     n_samples, n_trials, n_bins, n_neurons = samples.shape
     
     fig.subplots_adjust(hspace=0)
@@ -82,7 +82,7 @@ def plot_z_2d(fig, axs, data, trial_indcs, cfg, color, regime):
     
     [axs[i].set_title(f'trial {trial_indcs[i]}', fontsize=8) for i in range(n_trials)]
     
-    [axs[i].plot(torch.tensor(gaussian_filter1d(torch.mean(samples[:, i, :, n], dim=0), sigma=2, axis=0)), color=color, linewidth=0.8, alpha=0.8, label=regime if i == 0 and n == 0 else '')
+    [axs[i].plot(torch.tensor(gaussian_filter1d(torch.mean(samples[:, i, :, n], dim=0), sigma=2, axis=0)), color=color, linewidth=1.2, alpha=1, label=regime if i == 0 and n == 0 else '')
      for i in range(n_trials) for n in range(n_neurons)]
 
     [axs[i].set_xlim(0, n_bins) for i in range(n_trials)]
