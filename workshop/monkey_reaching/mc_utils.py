@@ -92,9 +92,9 @@ def plot_z_2d(fig, axs, data, trial_indcs, cfg, color, regime):
     
     
 def plot_rastor(data, latents, trial_list, top_n_neurons, cfg, regime='real', order=False):
-    
+#def plot_rastor(data, cfg, trial_list=[0, 1, 2, 3], top_n_neurons=10, regime='real', order=False, latents=None):
+
     data = data.clone()
-    latents = latents.clone()
     
     if order == True:
         
