@@ -179,7 +179,6 @@ dependencies:
       - urllib3==1.26.19
       - webcolors==24.6.0
       - wrapt==1.16.0
-      - xfads==0.5.0
       - yarl==1.9.4
       - zarr==2.18.2
       - zarr-checksum==0.4.0
