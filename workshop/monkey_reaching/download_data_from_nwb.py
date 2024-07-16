@@ -29,8 +29,6 @@ def main():
     # Trials aligned around the movement_onset time bin
     trial_data = dataset.make_trial_data(align_field='move_onset_time', align_range=(start, end))
     n_trials = trial_data.shape[0] // trial_length
-
-    print('Data splits (train/valid/test) saved into the "data" folder.')
     
     y = []
     target = []
@@ -75,6 +73,8 @@ def main():
     torch.save(train_data, save_root_path + f'data_train_{binsize}ms.pt')
     torch.save(valid_data, save_root_path + f'data_valid_{binsize}ms.pt')
     torch.save(test_data, save_root_path + f'data_test_{binsize}ms.pt')
+    
+    print('Data splits (train/valid/test) saved into the "data" folder.')
 
 
 if __name__ == '__main__':

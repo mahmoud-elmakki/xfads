@@ -9,12 +9,13 @@ from xfads.ssm_modules.prebuilt_models import create_xfads_poisson_log_link
 
 
 def main():
-    # at t=n_bins_bhv start forecast
-    n_bins_bhv = 10
 
     torch.cuda.empty_cache()
     initialize(version_base=None, config_path="", job_name="monkey_reaching")
-    cfg = compose(config_name="config")
+    cfg = compose(config_name="config_10ms")
+    
+    # at t=n_bins_bhv start forecast
+    n_bins_bhv = cfg.n_bins_bhv
 
     lightning.seed_everything(cfg.seed, workers=True)
     torch.set_default_dtype(torch.float32)
