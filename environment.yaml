@@ -3,7 +3,6 @@ channels:
   - anaconda
   - defaults
 dependencies:
-  - appnope=0.1.2
   - asttokens=2.0.5
   - backcall=0.2.0
   - blas=1.0
@@ -26,8 +25,6 @@ dependencies:
   - jupyter_core=5.5.0
   - libcxx=14.0.6
   - libffi=3.4.4
-  - libgfortran=5.0.0
-  - libgfortran5=11.3.0
   - libopenblas=0.3.21
   - libprotobuf=3.20.3
   - libsodium=1.0.18
