@@ -84,17 +84,16 @@ def plot_rastor(data, cfg, trial_list=[0, 1, 2, 3], top_n_neurons=10, regime='re
             
             if trial==trial_list[0]:
                 
-                if regime == 'prediction':
-                    
+                if regime == 'prediction':  
                     ymin, ymax = ax.get_ylim()
     
-                    ax.annotate(
-                        'prediction\nstarts',
-                        xy=(cfg.n_bins_bhv, 0), xytext=(cfg.n_bins_bhv*0.4, 0-top_n_neurons*0.05),
-                        arrowprops=dict(facecolor='gray', arrowstyle='->', alpha=0.7),
-                        fontsize=8, ha='center', alpha=1)
+                    ax.annotate('prediction\nstarts',
+                                xy=(cfg.n_bins_bhv, 0),
+                                xytext=(cfg.n_bins_bhv*0.4, 0-top_n_neurons*0.05),
+                                arrowprops=dict(facecolor='black', arrowstyle='->', alpha=0.7),
+                                fontsize=8, ha='center', alpha=0.9)
             
-        #  make the y-axis unvisible exept for the first plot.
+        # make the y-axis unvisible exept for the first plot.
         [axes[i].yaxis.set_visible('false') for i in range(1, n_trials_to_plot)]
         [axes[i].set_yticks([]) for i in range(1, n_trials_to_plot)]
         

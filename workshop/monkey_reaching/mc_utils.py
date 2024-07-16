@@ -92,7 +92,6 @@ def plot_z_2d(fig, axs, data, trial_indcs, cfg, color, regime):
     
     
 def plot_rastor(data, latents, trial_list, top_n_neurons, cfg, regime='real', order=False):
-#def plot_rastor(data, cfg, trial_list=[0, 1, 2, 3], top_n_neurons=10, regime='real', order=False, latents=None):
 
     data = data.clone()
     
@@ -142,15 +141,28 @@ def plot_rastor(data, latents, trial_list, top_n_neurons, cfg, regime='real', or
             if trial==trial_list[0]:
                 
                 if regime == 'prediction':
-                    ax.annotate('pred\nstarts', xy=(cfg.n_bins_bhv, 0), xytext=(11-5-3, -20),
-                         arrowprops=dict(facecolor='black', arrowstyle='->'),
-                         fontsize=8, ha='center')
+                    ymin, ymax = ax.get_ylim()
+    
+                    ax.annotate('pred\nstarts',
+                                xy=(cfg.n_bins_bhv, 0),
+                                xytext=(cfg.n_bins_bhv*0.4, 0-top_n_neurons*0.1),
+                                arrowprops=dict(facecolor='black', arrowstyle='->', alpha=0.7),
+                                fontsize=8, ha='center', alpha=0.9)
             
-                ax.annotate('move\nonset', xy=(cfg.move_onset, 0), xytext=(11+5, -20),
-                     arrowprops=dict(facecolor='black', arrowstyle='->'),
-                     fontsize=8, ha='center')
+                    ax.annotate('move\nonset',
+                                xy=(cfg.move_onset, 0),
+                                xytext=(11+5, -20),
+                                arrowprops=dict(facecolor='black', arrowstyle='->', alpha=0.7),
+                                fontsize=8, ha='center', alpha=0.9)
+                    
+                if regime == 'real':
+                    ax.annotate('move\nonset',
+                                xy=(cfg.move_onset, 0),
+                                xytext=(11-7, -10),
+                                arrowprops=dict(facecolor='black', arrowstyle='->', alpha=0.7),
+                                fontsize=8, ha='center', alpha=0.9)
             
-        #  make the y-axis unvisible exept for the first plot.
+        # make the y-axis unvisible exept for the first plot.
         [axes[i].yaxis.set_visible('false') for i in range(1, n_trials_to_plot)]
         [axes[i].set_yticks([]) for i in range(1, n_trials_to_plot)]
         
